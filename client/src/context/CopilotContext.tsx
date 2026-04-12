@@ -26,11 +26,6 @@ const CopilotContextProvider = ({ children }: { children: ReactNode }) => {
 
     const executeAction = async (action: CopilotActionType) => {
         try {
-            if (!import.meta.env.VITE_GEMINI_API_KEY) {
-                toast.error("Missing Gemini API key")
-                return
-            }
-
             if (!activeFile) {
                 toast.error("Open a file to use Copilot actions")
                 return

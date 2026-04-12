@@ -10,7 +10,6 @@
         "preview": "vite preview --host 0.0.0.0"
     },
     "dependencies": {
-        "@google/genai": "^1.49.0",
         "@uiw/codemirror-extensions-color": "^4.21.21",
         "@uiw/codemirror-extensions-hyper-link": "^4.21.21",
         "@uiw/codemirror-extensions-langs": "^4.21.21",

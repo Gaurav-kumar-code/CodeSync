@@ -15,10 +15,12 @@ const executionService_1 = require("./services/executionService");
 const reactPreviewBundlerService_1 = require("./services/reactPreviewBundlerService");
 const previewAssetStore_1 = require("./services/previewAssetStore");
 const previewLiveStore_1 = require("./services/previewLiveStore");
+const copilotRoutes_1 = __importDefault(require("./routes/copilotRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: "20mb" }));
 app.use((0, cors_1.default)());
+app.use("/api", copilotRoutes_1.default);
 app.post("/api/run-code", async (req, res) => {
     try {
         const { code, language, input, files } = req.body;
