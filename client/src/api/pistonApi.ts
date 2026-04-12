@@ -39,7 +39,7 @@ interface PreviewReactPayload {
     liveSessionId?: string
 }
 
-const backendBaseUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
+const backendBaseUrl = import.meta.env.VITE_BACKEND_URL || "  "
 
 const runCodeApi = async ({
     code,

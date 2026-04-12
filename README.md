@@ -141,7 +141,7 @@ Create `.env` in the `server` directory.
 ```env
 PORT=3000
 GEMINI_API_KEY=your_gemini_api_key
-PREVIEW_ASSET_BASE_URL=http://localhost:3000
+PREVIEW_ASSET_BASE_URL=  
 ```
 
 If your frontend runs on another URL, add or update CORS logic as needed.

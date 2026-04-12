@@ -216,7 +216,7 @@ try {
 
                 setPreviewError(
                     isNetworkError
-                        ? "Network error while generating preview. Make sure backend is running at http://localhost:3000"
+                        ? "Network error while generating preview. Make sure backend is running at   "
                         : `${
                               error?.response?.data?.error ||
                               error?.message ||
