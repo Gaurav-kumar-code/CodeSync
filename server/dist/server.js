@@ -83,7 +83,7 @@ app.post("/api/preview-react", async (req, res) => {
         const host = req.header("x-forwarded-host") || req.header("host");
         const assetBaseUrl = host
             ? `${proto}://${host}`
-            : process.env.PREVIEW_ASSET_BASE_URL || "http://localhost:3000";
+            : process.env.PREVIEW_ASSET_BASE_URL || "  ";
         const preview = await (0, reactPreviewBundlerService_1.bundleReactPreview)({
             fileTree,
             entryFilePath,
