@@ -27,5 +27,4 @@ var SocketEvent;
     SocketEvent["REQUEST_DRAWING"] = "request-drawing";
     SocketEvent["SYNC_DRAWING"] = "sync-drawing";
     SocketEvent["DRAWING_UPDATE"] = "drawing-update";
-})(SocketEvent || (SocketEvent = {}));
-exports.SocketEvent = SocketEvent;
+})(SocketEvent || (exports.SocketEvent = SocketEvent = {}));

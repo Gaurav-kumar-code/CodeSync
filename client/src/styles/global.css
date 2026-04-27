@@ -1,27 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap");
 @import url("tldraw/tldraw.css");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Your custom styles below */
+:root {
+  --bg: #08090c;
+  --surface: #101217;
+  --surface-elevated: #1e2230;
+  --text: #f5f7fb;
+  --text-muted: #aab4c9;
+  --brand: #41c87a;
+  --accent: #0ea5e9;
 
-/* ---------------------------------- */
-/* Global Styles */
-/* ---------------------------------- */
-
-body {
-  font-family: "Space Grotesk", sans-serif;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-
-  --sb-track-color: #3d404a;
-  --sb-thumb-color: #e1e1ffb3;
-  --sb-size: 6px;
+  --sb-track-color: #1e2230;
+  --sb-thumb-color: rgba(170, 180, 201, 0.65);
+  --sb-size: 8px;
 }
 
-/* Scrollbar */
+:root[data-theme="light"] {
+  --bg: #f8fbff;
+  --surface: #ffffff;
+  --surface-elevated: #f2f6fc;
+  --text: #111827;
+  --text-muted: #6b7280;
+
+  --sb-track-color: #e5e7eb;
+  --sb-thumb-color: rgba(107, 114, 128, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 0% 0%, rgba(65, 200, 122, 0.1), transparent 35%),
+    radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.1), transparent 35%),
+    var(--bg);
+  color: var(--text);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+.cm-editor {
+  max-height: 93vh;
+}
+
+.cm-editor .cm-scroller {
+  font-family: "JetBrains Mono", monospace;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
 
 ::-webkit-scrollbar {
   width: var(--sb-size);
@@ -30,50 +75,18 @@ body {
 
 ::-webkit-scrollbar-track {
   background: var(--sb-track-color);
-  border-radius: 5px;
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
-  border-radius: 5px;
+  border-radius: 999px;
 }
 
 @supports not selector(::-webkit-scrollbar) {
   body {
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
-}
-
-/* ---------------------------------- */
-/* Animations */
-/* ---------------------------------- */
-
-@keyframes up-down {
-  0% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-/* ---------------------------------- */
-/* Editor */
-/* ---------------------------------- */
-
-.cm-editor {
-  max-height: 93vh;
-}
-
-.cm-editor .cm-scroller {
-  font-family: "Space Mono", monospace;
-}
-
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
@@ -85,10 +98,6 @@ select {
     min-height: calc(93vh - 60px);
   }
 }
-
-/* ---------------------------------- */
-/* GitHub Corner Animation */
-/* ---------------------------------- */
 
 .github-corner:hover .octo-arm {
   animation: octocat-wave 560ms ease-in-out;
@@ -107,4 +116,178 @@ select {
   80% {
     transform: rotate(10deg);
   }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spring-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-2px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes stagger-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.fade-in {
+  animation: fade-in 260ms ease-out;
+}
+
+.slide-up {
+  animation: slide-up 280ms ease-out;
+}
+
+.spring-in {
+  animation: spring-in 360ms ease-out;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+.pulse-status {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typewriter 1.3s steps(24, end);
 }

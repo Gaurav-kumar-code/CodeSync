@@ -2,7 +2,6 @@ import { useCopilot } from "@/context/CopilotContext"
 import { useFileSystem } from "@/context/FileContext"
 import { useRunCode } from "@/context/RunCodeContext"
 import { useSocket } from "@/context/SocketContext"
-import useResponsive from "@/hooks/useResponsive"
 import { SocketEvent } from "@/types/socket"
 import toast from "react-hot-toast"
 import {
@@ -18,7 +17,6 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"
 
 function CopilotView() {
     const {socket} = useSocket()
-    const { viewHeight } = useResponsive()
     const {
         generateCode,
         fixCode,
@@ -92,8 +90,7 @@ function CopilotView() {
 
     return (
         <div
-            className="flex max-h-full min-h-[400px] w-full flex-col gap-2 p-4"
-            style={{ height: viewHeight }}
+            className="flex h-full max-h-full min-h-[400px] w-full flex-col gap-2 p-4"
         >
             <h1 className="view-title">Copilot</h1>
             <textarea

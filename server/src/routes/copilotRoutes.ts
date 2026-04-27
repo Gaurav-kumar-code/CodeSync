@@ -3,6 +3,6 @@ import { runCopilotActionController } from "../controllers/copilotController"
 
 const copilotRoutes = Router()
 
-copilotRoutes.post("/copilot", runCopilotActionController)
+copilotRoutes.post("/", runCopilotActionController)
 
 export default copilotRoutes
