@@ -49,14 +49,18 @@ app.post("/api/preview-react", async (req: Request, res: Response) => {
       liveSessionId,
     })
 
-    if (liveSessionId) {
-      setLivePreview(liveSessionId, {
-        html: preview.html,
-        entryFilePath: preview.entryFilePath,
-      })
-    }
+    const resolvedLiveSessionId = liveSessionId || preview.previewId
 
-    return res.json(preview)
+    setLivePreview(resolvedLiveSessionId, {
+      html: preview.html,
+      entryFilePath: preview.entryFilePath,
+    })
+
+    return res.json({
+      ...preview,
+      liveSessionId: resolvedLiveSessionId,
+      livePreviewUrl: `${assetBaseUrl}/api/preview-live/${encodeURIComponent(resolvedLiveSessionId)}`,
+    })
   } catch (error: any) {
     console.error("Preview Error:", error?.message || error, error?.details || "")
     return res.status(400).json({
@@ -147,7 +151,7 @@ app.get("/api/preview-live/:liveSessionId", (req: Request, res: Response) => {
         <span class="dot"></span>
         <span id="statusText">Waiting for first preview build...</span>
       </div>
-      <iframe id="previewFrame" title="Live Preview" sandbox="allow-scripts"></iframe>
+      <iframe id="previewFrame" title="Live Preview" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>
     <script>
       const liveSessionId = ${escapedSessionId};

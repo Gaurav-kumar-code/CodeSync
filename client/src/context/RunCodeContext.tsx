@@ -310,16 +310,20 @@ try {
                 files,
             })
 
-            if (data.url) {
-                setOutput(data.url)
-            } else if (data.stdout) {
-                setOutput(data.stdout)
-            } else if (data.stderr) {
-                setOutput(data.stderr)
-            } else if (data.exception) {
-                setOutput(data.exception)
-            } else if (data.error) {
-                setOutput(data.error)
+            const textOutputs = [data.stdout, data.stderr, data.exception, data.error]
+                .map((value: unknown) => (typeof value === "string" ? value.trim() : ""))
+
+            const firstText = textOutputs.find((value) => value.length > 0)
+            const url = typeof data.url === "string" ? data.url.trim() : ""
+
+            if (firstText) {
+                setOutput(firstText)
+            } else if (url) {
+                if (selectedLanguage.language === "react" || selectedLanguage.language === "html") {
+                    setOutput("Open the Preview tab to view web output.")
+                } else {
+                    setOutput(url)
+                }
             } else {
                 setOutput("No output")
             }

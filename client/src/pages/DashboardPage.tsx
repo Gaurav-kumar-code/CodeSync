@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from "react"
-import { Plus, Search } from "lucide-react"
+import { Download, Plus, Search } from "lucide-react"
 import { useProjectContext } from "../context/ProjectContext"
 import { Button, Input } from "../components/ui/core"
 import { ProjectCard } from "../components/dashboard/ProjectCard"
 import { useNavigate } from "react-router-dom"
+import { GitHubImportModal } from "../components/modals/GitHubImportModal"
 
 const DashboardPage = () => {
   const navigate = useNavigate()
   const { projects, loadProjects, createProject, isLoading } = useProjectContext()
   const [searchText, setSearchText] = useState("")
+  const [isImportOpen, setIsImportOpen] = useState(false)
 
   useEffect(() => {
     void loadProjects()
@@ -37,6 +39,16 @@ const DashboardPage = () => {
     navigate(`/editor/${created._id}`)
   }
 
+  const onImportProject = () => {
+    setIsImportOpen(true)
+  }
+
+  const onImportedProject = async ({ projectId }: { projectId: string }) => {
+    setIsImportOpen(false)
+    await loadProjects()
+    navigate(`/editor/${projectId}`)
+  }
+
   return (
     <div className="min-h-screen bg-neutral-950 px-6 py-8 text-neutral-100">
       <div className="mx-auto w-full max-w-7xl space-y-6">
@@ -45,9 +57,14 @@ const DashboardPage = () => {
             <h1 className="font-display text-3xl font-semibold">Project Dashboard</h1>
             <p className="text-sm text-neutral-400">Manage projects, collaborators, and active coding sessions.</p>
           </div>
-          <Button iconLeft={<Plus size={16} />} onClick={onCreateProject}>
-            Create Project
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button variant="secondary" iconLeft={<Download size={16} />} onClick={onImportProject}>
+              Import from GitHub
+            </Button>
+            <Button iconLeft={<Plus size={16} />} onClick={onCreateProject}>
+              Create Project
+            </Button>
+          </div>
         </header>
 
         <div className="grid gap-4 md:grid-cols-[1fr_auto]">
@@ -71,6 +88,11 @@ const DashboardPage = () => {
           ))}
         </section>
       </div>
+      <GitHubImportModal
+        open={isImportOpen}
+        onClose={() => setIsImportOpen(false)}
+        onImported={onImportedProject}
+      />
     </div>
   )
 }

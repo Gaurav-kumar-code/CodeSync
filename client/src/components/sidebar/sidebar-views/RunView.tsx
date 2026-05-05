@@ -347,7 +347,7 @@ function RunView() {
                             <iframe
                                 title="Live preview"
                                 className="h-full w-full rounded-md border border-darkHover bg-white"
-                                sandbox="allow-scripts"
+                                sandbox="allow-scripts allow-same-origin"
                                 srcDoc={previewOutput}
                             />
                         ) : (
