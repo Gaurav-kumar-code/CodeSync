@@ -12,21 +12,24 @@ const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const env_1 = require("../config/env");
 const applySecurityMiddleware = (app) => {
     app.set("trust proxy", 1);
-    app.use((0, cors_1.default)({
+    app.use("/", (0, cors_1.default)({
         origin: env_1.env.corsOrigin,
         credentials: true,
     }));
-    app.use((0, helmet_1.default)({
+    app.use("/", (0, helmet_1.default)({
         crossOriginResourcePolicy: { policy: "cross-origin" },
     }));
-    app.use((0, compression_1.default)());
-    app.use((0, express_rate_limit_1.default)({
+    app.use("/", (0, compression_1.default)());
+    app.use("/", (0, express_rate_limit_1.default)({
         windowMs: 15 * 60 * 1000,
         max: 600,
         standardHeaders: true,
         legacyHeaders: false,
     }));
-    app.use(express_1.default.json({ limit: "20mb" }));
-    app.use(express_1.default.urlencoded({ extended: true, limit: "20mb" }));
+    app.use("/", express_1.default.json({ limit: "20mb" }));
+    app.use("/", express_1.default.urlencoded({
+        extended: true,
+        limit: "20mb",
+    }));
 };
 exports.applySecurityMiddleware = applySecurityMiddleware;

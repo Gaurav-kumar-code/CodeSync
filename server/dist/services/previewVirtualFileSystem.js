@@ -136,22 +136,49 @@ const resolveVirtualImport = (importPath, importerPath, files) => {
         if (files.has(normalized)) {
             return normalized;
         }
+        const publicBase = normalizeVirtualPath(`/public${importPath}`);
+        if (files.has(publicBase)) {
+            return publicBase;
+        }
         for (const suffix of RESOLUTION_SUFFIXES.slice(1)) {
             const candidate = normalizeVirtualPath(`${importPath}${suffix}`);
             if (files.has(candidate)) {
                 return candidate;
             }
+            const publicCandidate = normalizeVirtualPath(`/public${importPath}${suffix}`);
+            if (files.has(publicCandidate)) {
+                return publicCandidate;
+            }
         }
         return null;
     }
-    const importerDirectory = importerPath.includes("/")
-        ? importerPath.slice(0, importerPath.lastIndexOf("/"))
+    const normalizedImporter = normalizeVirtualPath(importerPath);
+    const importerDirectory = normalizedImporter.includes("/")
+        ? normalizedImporter.slice(0, normalizedImporter.lastIndexOf("/"))
         : "/";
-    const basePath = normalizeVirtualPath(`${importerDirectory}/${importPath}`);
+    const rootSegment = normalizedImporter.split("/").filter(Boolean)[0];
+    let candidateImportPath = importPath;
+    if (rootSegment) {
+        const normalizedImport = importPath.replace(/^\.\//, "");
+        const rootPrefix = `${rootSegment}/`;
+        if (normalizedImport.startsWith(rootPrefix)) {
+            candidateImportPath = `./${normalizedImport.slice(rootPrefix.length)}`;
+        }
+    }
+    const basePath = normalizeVirtualPath(`${importerDirectory}/${candidateImportPath}`);
     for (const suffix of RESOLUTION_SUFFIXES) {
         const candidate = suffix ? normalizeVirtualPath(`${basePath}${suffix}`) : basePath;
         if (files.has(candidate)) {
             return candidate;
+        }
+    }
+    if (candidateImportPath !== importPath) {
+        const fallbackBase = normalizeVirtualPath(`${importerDirectory}/${importPath}`);
+        for (const suffix of RESOLUTION_SUFFIXES) {
+            const candidate = suffix ? normalizeVirtualPath(`${fallbackBase}${suffix}`) : fallbackBase;
+            if (files.has(candidate)) {
+                return candidate;
+            }
         }
     }
     return null;

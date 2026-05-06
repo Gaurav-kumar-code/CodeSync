@@ -80,9 +80,9 @@ const buildPreviewHtml = (bundledCode, bundledCss) => `<!doctype html>
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       }
     </style>
-        <style>
+    <style>
 ${bundledCss}
-        </style>
+    </style>
   </head>
   <body>
     <div id="root"></div>
@@ -148,9 +148,34 @@ const bundleReactPreview = async ({ fileTree, entryFilePath, assetBaseUrl, debug
                     return { path: args.path, external: true };
                 }
                 if (args.path.startsWith(".") || args.path.startsWith("/")) {
-                    const importer = args.importer
-                        ? (0, previewVirtualFileSystem_1.normalizeVirtualPath)(args.importer)
-                        : resolvedEntryFile;
+                    const isFromEntryShim = !args.importer || args.importer.includes("__entry__");
+                    // Absolute import from the synthetic entry shim — look up directly in modules
+                    if (isFromEntryShim && args.path.startsWith("/")) {
+                        const normalized = (0, previewVirtualFileSystem_1.normalizeVirtualPath)(args.path);
+                        if (modules.has(normalized)) {
+                            debugInfo.resolvedImports += 1;
+                            if ((0, previewVirtualFileSystem_1.isAssetPath)(normalized)) {
+                                return { path: normalized, namespace: "vfs-asset" };
+                            }
+                            return { path: normalized, namespace: "vfs-code" };
+                        }
+                        // Not found in modules
+                        debugInfo.failedResolutions.push({
+                            importPath: args.path,
+                            importer: "/__entry__.tsx",
+                        });
+                        return {
+                            errors: [
+                                {
+                                    text: `Cannot resolve entry module '${args.path}' in virtual file system`,
+                                },
+                            ],
+                        };
+                    }
+                    // Relative or absolute import from a real virtual module
+                    const importer = isFromEntryShim
+                        ? resolvedEntryFile
+                        : (0, previewVirtualFileSystem_1.normalizeVirtualPath)(args.importer);
                     const resolved = (0, previewVirtualFileSystem_1.resolveVirtualImport)(args.path, importer, modules);
                     if (!resolved) {
                         debugInfo.failedResolutions.push({
@@ -171,6 +196,7 @@ const bundleReactPreview = async ({ fileTree, entryFilePath, assetBaseUrl, debug
                     }
                     return { path: resolved, namespace: "vfs-code" };
                 }
+                // Bare specifier — route to esm.sh
                 debugInfo.externalImports.push(args.path);
                 return {
                     path: `https://esm.sh/${args.path}`,
@@ -207,6 +233,7 @@ const bundleReactPreview = async ({ fileTree, entryFilePath, assetBaseUrl, debug
     try {
         const buildResult = await esbuild.build({
             stdin: {
+                // Absolute path import — handled directly in onResolve without resolveVirtualImport
                 contents: `import "${resolvedEntryFile}";`,
                 sourcefile: "/__entry__.tsx",
                 resolveDir: "/",
